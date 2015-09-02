@@ -40,7 +40,7 @@ class NoteManager {
         
         return $oNote;
     }
-    
+
     public static function getAllNotesByEleve($idEleve){
         $sQuery = "SELECT * FROM note AS n JOIN matieres AS m ON m.id = n.matiere_id ";
         $sQuery .= "WHERE n.eleve_id=".$idEleve." GROUP BY n.matiere_id";
@@ -52,7 +52,7 @@ class NoteManager {
             $iCurrentMatiereId = $aNote['matiere_id'];
             $sQueryByMatiere = 'SELECT note FROM note WHERE matiere_id='.$iCurrentMatiereId." AND eleve_id = ".$idEleve;
             
-            foreach(DBOperation::getOne($sQueryByMatiere) as $aNoteByMatiere){
+            foreach(DBOperation::getAll($sQueryByMatiere) as $aNoteByMatiere){
                 $aNotesByMatiere[] = $aNoteByMatiere;
             }
 //            var_dump($aNotesByMatiere);die();
@@ -63,6 +63,15 @@ class NoteManager {
             $aNotes[]=self::convertToObject($aNote);
         }
         return $aNotes;
+    }
+    
+    public static function getTotalAvgByEleve($idEleve){
+        $sQuery = "SELECT ROUND(AVG(note),1) as 'moyenne_generale' FROM note WHERE eleve_id = ".$idEleve.";";
+        $totalAvg = DBOperation::getOne($sQuery);
+        if(!$totalAvg){
+            $totalAvg = "Cet élève n'a pas de notes.";
+        }
+        return $totalAvg;
     }
     
     public static function addNote(Note $oNote){

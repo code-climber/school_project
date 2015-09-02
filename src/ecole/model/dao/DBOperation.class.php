@@ -65,7 +65,7 @@
             self::init();
             try {
                 $oQueryResult = self::$oDataBase->query($sQuery);
-                $aRow = $oQueryResult->fetchAll();
+                $aRow = $oQueryResult->fetch();
             } catch (PDOException $oPdoException) {
                 echo 'PDO Exception : ' . $oPdoException->getMessage();
             }

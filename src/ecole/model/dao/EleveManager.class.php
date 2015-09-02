@@ -58,7 +58,7 @@ class EleveManager {
         
         $aKid = array();
 
-        foreach(DBOperation::getOne($sQuery) as $kid){
+        foreach(DBOperation::getAll($sQuery) as $kid){
            
             $aKid['id'] = $kid['id'];
             $aKid['prenom'] = $kid['prenom'];

@@ -72,9 +72,9 @@
     </thead>
     <tbody>
         <?php foreach ($aNotes as $oNote): ?>
-        <?php // var_dump($aNotes); ?>
+        
             <tr>
-                    <?php // foreach($oNote->getMatiere()): ?>
+                   
                     <td><?php echo $oNote->getMatiere(); ?></td>
                     <?php 
                         $aNotes = $oNote->getNote();
@@ -90,12 +90,17 @@
                             
                         ?>
                     </td>
-                   <?php // endforeach; ?>
+                   
             </tr>
              
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<div>
+    <h3>Moyenne générale</h5>
+    <span><?php echo $totalAvg['moyenne_generale']; ?></span>
+</div>
 
 
 <h2>Ajouter des notes</h2>
