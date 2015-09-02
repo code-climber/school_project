@@ -74,11 +74,11 @@
         <?php foreach ($aNotes as $oNote): ?>
         <?php // var_dump($aNotes); ?>
             <tr>
-                    <?php foreach($oNote->getAMatieres() as $key=>$matiere): ?>
-                    <td><?php echo $matiere; ?></td>
+                    <?php // foreach($oNote->getMatiere()): ?>
+                    <td><?php echo $oNote->getMatiere(); ?></td>
                     
-                    <td><?php echo implode(", ",$oNote->getNote()); ?></td>
-                   <?php endforeach; ?>
+                    <td><?php  echo $oNote->getNote(); ?></td>
+                   <?php // endforeach; ?>
             </tr>
              
         <?php endforeach; ?>

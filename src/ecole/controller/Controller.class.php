@@ -68,7 +68,7 @@ class Controller {
 
             //passage des notes par matière concernant un élève
             $aNotes = NoteManager::getAllNotesByEleve($idEleve);
-            
+//            var_dump($aNotes);die();
         }
         //en update ou create, l'envoi se fera en $_POST, il faut vérifier les données.
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

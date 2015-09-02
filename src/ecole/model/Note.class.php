@@ -18,7 +18,7 @@ class Note {
     private $note = array();
     private $eleve_id;
     private $matiere_id;
-    private $aMatieres = array();
+    private $matiere="";
     
     function getId() {
         return $this->id;
@@ -36,8 +36,8 @@ class Note {
         return $this->matiere_id;
     }
 
-    function getAMatieres() {
-        return $this->aMatieres;
+    function getMatiere() {
+        return $this->matiere;
     }
 
     function setId($id) {
@@ -56,8 +56,8 @@ class Note {
         $this->matiere_id = $matiere_id;
     }
 
-    function setAMatieres($aMatieres) {
-        $this->aMatieres = $aMatieres;
+    function setMatiere($matiere) {
+        $this->matiere = $matiere;
     }
 
 
