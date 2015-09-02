@@ -21,7 +21,15 @@ class NoteManager {
         
         $oNote = new Note();
         $oNote->setId($aNote['id']);
-        $oNote->setNote($aNote['note']);
+        
+        if(!empty($aNote['notes_by_matiere'])){
+            
+            $oNote->setNote($aNote['notes_by_matiere']);
+            
+        }else{
+            $oNote->setNote(array());
+        }
+        
         $oNote->setEleve_id($aNote['eleve_id']);
         $oNote->setMatiere_id($aNote['matiere_id']);
         if(!empty($aNote['matiere'])){
@@ -29,19 +37,29 @@ class NoteManager {
         }else{
             $oNote->setMatiere("");
         }
+        
         return $oNote;
     }
     
     public static function getAllNotesByEleve($idEleve){
         $sQuery = "SELECT * FROM note AS n JOIN matieres AS m ON m.id = n.matiere_id ";
-        $sQuery .= "WHERE n.eleve_id=".$idEleve;
+        $sQuery .= "WHERE n.eleve_id=".$idEleve." GROUP BY n.matiere_id";
 
-        var_dump($sQuery);die();
         $aNotes = array();
         
         foreach(DBOperation::getAll($sQuery) as $aNote){
+            $aNotesByMatiere = array();
+            $iCurrentMatiereId = $aNote['matiere_id'];
+            $sQueryByMatiere = 'SELECT note FROM note WHERE matiere_id='.$iCurrentMatiereId." AND eleve_id = ".$idEleve;
+            
+            foreach(DBOperation::getOne($sQueryByMatiere) as $aNoteByMatiere){
+                $aNotesByMatiere[] = $aNoteByMatiere;
+            }
+//            var_dump($aNotesByMatiere);die();
             $matiere = $aNote['libelle'];
             $aNote['matiere'] = $matiere;
+            $aNote['notes_by_matiere'] = $aNotesByMatiere;
+            
             $aNotes[]=self::convertToObject($aNote);
         }
         return $aNotes;

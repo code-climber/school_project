@@ -76,8 +76,15 @@
             <tr>
                     <?php // foreach($oNote->getMatiere()): ?>
                     <td><?php echo $oNote->getMatiere(); ?></td>
-                    
-                    <td><?php  echo $oNote->getNote(); ?></td>
+                    <?php $aNotes = $oNote->getNote(); ?>
+                    <td>
+                        <?php  foreach($aNotes as $key => $note){
+      
+                            echo implode(' ,' , $note);
+                        }
+                            
+                        ?>
+                    </td>
                    <?php // endforeach; ?>
             </tr>
              
