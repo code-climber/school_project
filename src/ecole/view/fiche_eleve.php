@@ -76,12 +76,17 @@
             <tr>
                     <?php // foreach($oNote->getMatiere()): ?>
                     <td><?php echo $oNote->getMatiere(); ?></td>
-                    <?php $aNotes = $oNote->getNote(); ?>
+                    <?php 
+                        $aNotes = $oNote->getNote();
+                    ?>
                     <td>
-                        <?php  foreach($aNotes as $key => $note){
-      
-                            echo implode(' ,' , $note);
+                        <?php
+                        //pour utiliser implode sur un tableau associatif quand on n'a pas PHP 5.5 :
+                        $result = array();
+                        foreach($aNotes as $row){
+                            $result[]=$row['note'];
                         }
+                        echo implode(", ", $result);
                             
                         ?>
                     </td>
