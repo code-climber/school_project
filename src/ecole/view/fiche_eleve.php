@@ -37,6 +37,7 @@
             <label for="currentClasse">Classe courante</label>
             <input type="text" name="currentClasse" id="currentClasse" value="<?php echo $classe[0]; ?>">
             <div class="form-group">
+            <?php if(array_key_exists('role', $_SESSION)): ?>    
             <label for="classe">Mettre à jour la classe:</label>
             <select class="form-control" id="classe" name="classe">
                 <?php foreach ($aClasses as $oClasse): ?>
@@ -45,6 +46,7 @@
                     </option>
                 <?php endforeach; ?>
             </select>
+            <?php endif; ?>
             </div>
         <?php } else { ?>
             <label for="classe">Classe:</label>
@@ -57,9 +59,12 @@
             </select>
         <?php } ?>
     </div>
-
+    <?php if(array_key_exists('role', $_SESSION)): ?>
     <button type="submit" class="btn btn-default">Soumettre</button>
+    <?php endif; ?>
 </form>
+
+<!--    TABLEAU DE NOTES PAR MATIERE    -->
 
 <?php if(array_key_exists('idEleve', $_GET)): ?>
 <h2>Notes de l'élève</h2>
@@ -103,6 +108,9 @@
 </div>
 
 
+<!--    AJOUTER DES NOTES    -->
+
+<?php if(array_key_exists('role', $_SESSION)): ?>
 <h2>Ajouter des notes</h2>
 <p>
     <?php if (!empty($errorNote)): ?>
@@ -137,4 +145,5 @@
 
     <button type="submit" class="btn btn-default">Ajouter la note</button>
 </form>
-<?php endif; ?>
+    <?php endif; ?>
+<?php endif;

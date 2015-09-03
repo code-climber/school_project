@@ -2,19 +2,23 @@
 
 namespace ecole\controller;
 
-use ecole\model\dao\DBOperation;
 use ecole\model\dao\EleveManager;
 use ecole\model\dao\ClasseManager;
 use ecole\model\dao\NoteManager;
 use ecole\model\dao\MatiereManager;
+use ecole\model\dao\UserManager;
 use ecole\model\Eleve;
 use ecole\model\Note;
+use ecole\model\User;
 
 //    use ecole\model\Classroom;
 
 
 class Controller {
 
+    /***************************************************************************
+     * GESTION DE L AFFICHAGE DES PAGES EN FONCTION DE L URL
+     */
     public function __construct() {
         $this->exec();
     }
@@ -28,7 +32,7 @@ class Controller {
         require ROOT . 'inc/site.header.inc.php';
 
         $sFunction = 'handle' . ucfirst($sPage);
-        // check if function exists in the current class :
+        // Recherche si la méthode existe dans la class courrante :
         if (method_exists($this, $sFunction)) {
             // call the function
             $this->$sFunction();
@@ -38,24 +42,38 @@ class Controller {
         require ROOT . 'inc/site.footer.inc.php';
     }
 
+    /***************************************************************************
+     * GESTION DES FONCTIONS DE CRUD
+     */
+    
+    
+    /*
+     * Méthode pour AFFICHER tous les élèves sur la page d'accueil.
+     */
     private function handleHome() {
+
         $aEleves = EleveManager::getAllKids();
         require ROOT . 'src/ecole/view/home.php';
     }
 
-    //Méthode permettant d'afficher le profil d'un élève, de créer un élève ou de modifier ses infos.
+    /*
+     * Méthode permettant de gérer les informations d'UN élève :
+     * Affichage, modification, création
+     */
     private function handleEleve() {
 
-        //déclaration
+        //déclaration des variables
         $idEleve = $nom = $prenom = $age = $sexe = $classe = $classeId = $error = NULL;
 
-        //passage des classes et des matieres au formulaire pour les selects
+        //passage des classes et des matieres au formulaire pour les listes déroulantes
         $aClasses = ClasseManager::getAllClassesObject();
         $aMatieres = MatiereManager::getAllMatieres();
 
-
-        //Si en mode d'update, il y aura une clé idEleve dans $_GET et on fera passer les infos
-        //de l'élève en cours via $_GET au formulaire d'élève.
+        /*
+         * Si en mode d'update ou d'affichage, il y aura une clé idEleve dans $_GET et on fera passer les infos
+         * de l'élève en cours via $_GET au formulaire d'élève.
+         */
+        
         if (array_key_exists('idEleve', $_GET)) {
             $idEleve = isset($_GET['idEleve']) ? intval($_GET['idEleve']) : "";
             $oEleve = EleveManager::getOneKid($idEleve);
@@ -73,7 +91,10 @@ class Controller {
             $totalAvg = NoteManager::getTotalAvgByEleve($idEleve);
 //            var_dump($totalAvg);die();
         }
-        //en update ou create, l'envoi se fera en $_POST, il faut vérifier les données.
+        /*
+         * en update ou create, l'envoie se fera en $_POST, il faut vérifier les données.
+         * A FAIRE EVOLUER AVEC DES REGEX.
+         */
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             if (empty($_POST['idEleve'])) {
@@ -114,11 +135,8 @@ class Controller {
             }
 
             //stocker l'id de la classe choisie
-            
             $choixClasseId = intval($_POST['classe']);
-           
             
-
             //Si pas d'erreur, préparation de l'objet pour envoie en bdd.
             if (empty($error)) {
                 $oEleve = new Eleve();
@@ -127,7 +145,6 @@ class Controller {
                 $oEleve->setPrenom($prenom);
                 $oEleve->setAge($age);
                 $oEleve->setSexe($sexe);
-//                $oEleve->setClasse($classe);
                 $oEleve->setClasseId($choixClasseId);
 
                 if (!empty($idEleve)) {
@@ -143,8 +160,15 @@ class Controller {
         require ROOT . 'src/ecole/view/fiche_eleve.php';
     }
 
-    //Fonction permettant de supprimer un élève particulier
+    /*
+     * Méthode de SUPPRESSION : supprimer UN élève particulier
+     */
     private function handleDeleteOneEleve() {
+        //Uniquement possible par l'admin
+        if (empty($_SESSION["role"])) {
+            $this->handleLogin();
+            return;
+        }
         //récupérer l'id de l'élève à supprimer
         $idEleve = array_key_exists('idEleve', $_GET) ? $_GET['idEleve'] : false;
 
@@ -154,9 +178,17 @@ class Controller {
         $this->handleHome();
         return;
     }
-
-    //fonction permettant d'ajouter une note pour une matière et pour un élève.
+    
+    /*
+     * Méthode d'AJOUT : ajouter une note pour une matière et pour un élève.
+     */
     private function handleAddNote() {
+        //Uniquement possible par l'admin
+        if (empty($_SESSION["role"])) {
+            $this->handleLogin();
+            return;
+        }
+        
         //déclaration
         $errorNote = $note = $matiere = NULL;
 
@@ -206,12 +238,49 @@ class Controller {
         }
     }
 
-    //Fonction pour formatter les données avant hydratation d'un objet
+    /*
+     * Méthode pour formatter les données avant hydratation d'un objet
+     */
     private function test_input($data) {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
         return $data;
+    }
+    
+    /***************************************************************************
+     * GESTION CONNEXION ADMINISTRATEUR
+     */
+    
+    /*
+     * 
+     */
+    private function performConnection(){
+        //Hydratation d'un objet user par récupération des donnés du formulaire de login.
+        $oUser = new User("", $_POST['login'], $_POST['password'],"");
+        
+        if(UserManager::connect($oUser)){
+            $this->handleHome();
+            header("Refresh: 1; url=src/ecole/view/home.php");
+        }else{
+            $bConnectError = true;
+            require ROOT . 'src/ecole/view/login.php';
+        }
+    }
+    
+    public function handleLogin(){
+        if(array_key_exists("connect", $_POST)){
+            $this->performConnection();
+        }else{
+            $bConnectError = false;
+            require ROOT . 'src/ecole/view/login.php';
+        }
+    }
+    
+    public function handleLogout() {
+        UserManager::logout();
+        $this->handleLogin();
+        return;
     }
 
 }

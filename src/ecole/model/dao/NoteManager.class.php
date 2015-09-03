@@ -67,7 +67,7 @@ class NoteManager {
     
     public static function getTotalAvgByEleve($idEleve){
         $sQuery = "SELECT ROUND(AVG(note),1) as 'moyenne_generale' FROM note WHERE eleve_id = ".$idEleve.";";
-        $totalAvg = DBOperation::getOne($sQuery);
+        $totalAvg = DBOperation::getOnlyOne($sQuery);
         if(!$totalAvg){
             $totalAvg = "Cet élève n'a pas de notes.";
         }

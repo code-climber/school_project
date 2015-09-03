@@ -1,5 +1,4 @@
 <?php
-    //démarrage d'une session
     session_start();
     
     //utilisation du controller principal

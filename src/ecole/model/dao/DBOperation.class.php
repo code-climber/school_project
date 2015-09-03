@@ -65,6 +65,20 @@
             self::init();
             try {
                 $oQueryResult = self::$oDataBase->query($sQuery);
+                $aRow = $oQueryResult->fetchAll();
+            } catch (PDOException $oPdoException) {
+                echo 'PDO Exception : ' . $oPdoException->getMessage();
+            }
+            return $aRow;
+        }
+        
+        /**
+         * Get a single value in an array
+         */
+        public static function getOnlyOne($sQuery){
+            self::init();
+            try {
+                $oQueryResult = self::$oDataBase->query($sQuery);
                 $aRow = $oQueryResult->fetch();
             } catch (PDOException $oPdoException) {
                 echo 'PDO Exception : ' . $oPdoException->getMessage();
