@@ -11,9 +11,6 @@ use ecole\model\Eleve;
 use ecole\model\Note;
 use ecole\model\User;
 
-//    use ecole\model\Classroom;
-
-
 class Controller {
 
     /***************************************************************************
@@ -28,7 +25,7 @@ class Controller {
         if (array_key_exists('page', $_GET)) {
             $sPage = $_GET['page'];
         }
-
+        ob_start();/* initialisation du tampon: on y stocke tout le contenu à renvoyer au client. */
         require ROOT . 'inc/site.header.inc.php';
 
         $sFunction = 'handle' . ucfirst($sPage);
@@ -40,6 +37,7 @@ class Controller {
             $this->handleHome();
         }
         require ROOT . 'inc/site.footer.inc.php';
+        ob_flush(); /* On vide le tampon et on retourne le contenu au client. */
     }
 
     /***************************************************************************
@@ -51,7 +49,6 @@ class Controller {
      * Méthode pour AFFICHER tous les élèves sur la page d'accueil.
      */
     private function handleHome() {
-
         $aEleves = EleveManager::getAllKids();
         require ROOT . 'src/ecole/view/home.php';
     }
@@ -89,7 +86,6 @@ class Controller {
             
             //passage de la moyenne générale de l'élève
             $totalAvg = NoteManager::getTotalAvgByEleve($idEleve);
-//            var_dump($totalAvg);die();
         }
         /*
          * en update ou create, l'envoie se fera en $_POST, il faut vérifier les données.
@@ -261,7 +257,10 @@ class Controller {
         
         if(UserManager::connect($oUser)){
             $this->handleHome();
-            header("Refresh: 1; url=src/ecole/view/home.php");
+            //rafraichir la page d'accueil pour que se mette à jour la navbar.
+            $urlParams = "page=home";
+            $url = "http://localhost/3WA/developpement/php/ecole_poo/ecole/index.php?".$urlParams;
+            header("LOCATION: $url");
         }else{
             $bConnectError = true;
             require ROOT . 'src/ecole/view/login.php';
@@ -273,13 +272,17 @@ class Controller {
             $this->performConnection();
         }else{
             $bConnectError = false;
-            require ROOT . 'src/ecole/view/login.php';
+            require ROOT . 'src/ecole/view/login.php';  
         }
     }
     
     public function handleLogout() {
         UserManager::logout();
         $this->handleLogin();
+        //rafraichir la page de login pour que se mette à jour la navbar.
+        $urlParams = "page=login";
+            $url = "http://localhost/3WA/developpement/php/ecole_poo/ecole/index.php?".$urlParams;
+            header("LOCATION: $url");
         return;
     }
 
