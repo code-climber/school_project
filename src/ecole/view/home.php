@@ -7,6 +7,16 @@
     Bonne visite !
 </p>
 
+<!--    BARRE DE RECHERCHE D ELEVE    -->
+
+<form method="post" action="index.php?page=home">
+    <label for="search">Rechercher un élève : </label>
+    <input type="text" name="search" id="search">
+    <button type="submit" class="btn btn-default">rechercher</button>
+</form>
+
+<!--    TABLEAU D ELEVES    -->
+
 <table class="table">
     <thead>
         <th>Elève</th>

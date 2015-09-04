@@ -12,7 +12,7 @@ use ecole\model\dao\DBOperation;
 class EleveManager {
     
     private static function convertToObject($aEleve){ 
-        
+        die("zaz");
         $oEleve = new Eleve();
         
         $oEleve->setId($aEleve['id']);
@@ -74,6 +74,22 @@ class EleveManager {
         }
         
         return self::convertToObject($aKid);
+    }
+    
+    public static function getChosenKids($eleveName){
+        $eleveName = substr($eleveName, 1);
+        $sQuery='SELECT *,e.id FROM eleves AS e JOIN classes ON classes.id=e.classe_id ';
+        $sQuery .= "WHERE e.prenom LIKE '%$eleveName' OR e.nom LIKE '%".$eleveName.';';
+
+        $aChosenEleves = array();
+        foreach(DBOperation::getAll($sQuery) as $aEleve){
+            $aClasse = array();
+            $aClasse[] = $aEleve['name'];
+            
+            $aChosenEleves['classe'] = $aClasse;
+            $aChosenEleves[] = self::convertToObject($aEleve);
+        }
+        return $aChosenEleves;
     }
     
     public static function addEleve(Eleve $oEleve){

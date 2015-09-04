@@ -25,6 +25,7 @@ class Controller {
         if (array_key_exists('page', $_GET)) {
             $sPage = $_GET['page'];
         }
+        //notion de tamporisation de sortie pour le rafraichissement de page.
         ob_start();/* initialisation du tampon: on y stocke tout le contenu à renvoyer au client. */
         require ROOT . 'inc/site.header.inc.php';
 
@@ -49,7 +50,15 @@ class Controller {
      * Méthode pour AFFICHER tous les élèves sur la page d'accueil.
      */
     private function handleHome() {
-        $aEleves = EleveManager::getAllKids();
+        if(array_key_exists('search', $_POST)){
+            if(!empty($_POST['search']) && is_string($_POST['search']) == true ){
+                $eleveName = htmlentities($_POST['search']);
+                $aChosenEleves = EleveManager::getChosenKids($eleveName);
+                return;
+            }  
+        }else{
+            $aEleves = EleveManager::getAllKids();
+        } 
         require ROOT . 'src/ecole/view/home.php';
     }
 

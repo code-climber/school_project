@@ -22,7 +22,11 @@
 
     <div class="form-group">
         <label for="age">Age</label>
+        <?php if(array_key_exists('role', $_SESSION)){ ?>
         <input type="number" name="age" id="age" required <?php if (!empty($age)) { ?> value="<?php echo $age; ?>"<?php } ?> >
+        <?php }else{ ?>
+        <input type="text" name="age" id="age" required <?php if (!empty($age)) { ?> value="<?php echo $age; ?>"<?php } ?> >
+        <?php } ?>
     </div>
 
     <div class="radio">
