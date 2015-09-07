@@ -12,7 +12,7 @@ use ecole\model\dao\DBOperation;
 class EleveManager {
     
     private static function convertToObject($aEleve){ 
-        die("zaz");
+
         $oEleve = new Eleve();
         
         $oEleve->setId($aEleve['id']);
@@ -20,14 +20,15 @@ class EleveManager {
         $oEleve->setPrenom($aEleve['prenom']);
         $oEleve->setSexe($aEleve['sexe']);
         $oEleve->setAge($aEleve['age']);
-        $oEleve->setClasse($aEleve['classe_id']);
+//        $oEleve->setClasse($aEleve['classe_id']);
         $oEleve->setClasseId($aEleve['classe_id']);
         
-        if(!empty($aEleve["classe"])){
-            $oEleve->setClasse($aEleve["classe"]);
+        if(!empty($aEleve["name"])){
+            $oEleve->setClasse($aEleve["name"]);
         }else{
             $oEleve->setClasse(array());
         }
+        
         return $oEleve;
     }
     
@@ -70,7 +71,7 @@ class EleveManager {
             $aClasses = array();
             $aClasses[] = $kid['name'];
             
-            $aKid['classe'] = $aClasses;
+            $aKid['name'] = $aClasses;
         }
         
         return self::convertToObject($aKid);
@@ -79,14 +80,10 @@ class EleveManager {
     public static function getChosenKids($eleveName){
         $eleveName = substr($eleveName, 1);
         $sQuery='SELECT *,e.id FROM eleves AS e JOIN classes ON classes.id=e.classe_id ';
-        $sQuery .= "WHERE e.prenom LIKE '%$eleveName' OR e.nom LIKE '%".$eleveName.';';
+        $sQuery .= "WHERE e.prenom LIKE '%$eleveName' OR e.nom LIKE '%".$eleveName."'";
 
         $aChosenEleves = array();
         foreach(DBOperation::getAll($sQuery) as $aEleve){
-            $aClasse = array();
-            $aClasse[] = $aEleve['name'];
-            
-            $aChosenEleves['classe'] = $aClasse;
             $aChosenEleves[] = self::convertToObject($aEleve);
         }
         return $aChosenEleves;

@@ -53,16 +53,17 @@ class Controller {
         if(array_key_exists('search', $_POST)){
             if(!empty($_POST['search']) && is_string($_POST['search']) == true ){
                 $eleveName = htmlentities($_POST['search']);
-                $aChosenEleves = EleveManager::getChosenKids($eleveName);
-                return;
+                $aEleves = EleveManager::getChosenKids($eleveName);
+//                var_dump($aEleves);die();
             }  
         }else{
             $aEleves = EleveManager::getAllKids();
+//            var_dump($aEleves);die();
         } 
         require ROOT . 'src/ecole/view/home.php';
     }
 
-    /*
+    /* HANDLE ELEVE
      * Méthode permettant de gérer les informations d'UN élève :
      * Affichage, modification, création
      */

@@ -15,7 +15,7 @@
     <button type="submit" class="btn btn-default">rechercher</button>
 </form>
 
-<!--    TABLEAU D ELEVES    -->
+<!--    TABLEAU DE TOUS LES ELEVES    -->
 
 <table class="table">
     <thead>
@@ -36,7 +36,7 @@
         <td><?php echo $oEleve->getAge(); ?></td>
         
             <?php $classe = $oEleve->getClasse();?>
-        <td> <?php echo $classe[0]; ?> </td>
+        <td> <?php echo $classe; ?> </td>
         
         <?php if(array_key_exists('role', $_SESSION)): ?>
         <td><a href="index.php?page=Eleve&idEleve=<?php echo $oEleve->getId(); ?>">modifier</a></td>
@@ -50,6 +50,5 @@
     </tbody>
 
 </table>
-
 
 
