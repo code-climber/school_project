@@ -37,7 +37,11 @@ class Controller {
         } else {
             $this->handleHome();
         }
-        require ROOT . 'inc/site.footer.inc.php';
+        
+        //n'afficher le footer que pour la page d'accueil
+        if($sFunction == "handleHome"){
+            require ROOT . 'inc/site.footer.inc.php';
+        }
         ob_flush(); /* On vide le tampon et on retourne le contenu au client. */
     }
 
