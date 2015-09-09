@@ -8,26 +8,21 @@
             ainsi que leurs notes de l'année et leur moyenne générale.
             Bonne visite !
         </p>
-
-        <blockquote>
-            "Les hommes apprennent dans les écoles tout ce qu'il faut oublier."<br>
-            <small class="pull-right">Christine de Suède ; Maximes et pensées (1682)</small>
-        </blockquote>
     </section
 </div>
 
 <div class="row">
     <!--    BARRE DE RECHERCHE D ELEVE    -->
+    <section class="col-md-6 col-md-offset-1 table-responsive top-buffer">
+        <form method="post" action="index.php?page=home">
+            <label for="search">Rechercher un élève : </label>
+            <input type="text" name="search" id="search">
+            <button type="submit" class="btn btn-default">rechercher</button>
+        </form>
 
-    <form method="post" action="index.php?page=home">
-        <label for="search">Rechercher un élève : </label>
-        <input type="text" name="search" id="search">
-        <button type="submit" class="btn btn-default">rechercher</button>
-    </form>
-    
-    <!--    TABLEAU DE TOUS LES ELEVES    -->
-    
-    <section class="col-md-6 col-md-offset-1 table-responsive">
+        <!--    TABLEAU DE TOUS LES ELEVES    -->
+
+
         <table class="table table-striped table-condensed">
             <thead>
             <th>Elève</th>
@@ -50,16 +45,14 @@
                         <td> <?php echo $classe; ?> </td>
 
                         <?php if (array_key_exists('role', $_SESSION)): ?>
-                            <td><a href="index.php?page=Eleve&idEleve=<?php echo $oEleve->getId(); ?>">modifier</a></td>
-
-                            <td><a href="index.php?page=deleteOneEleve&idEleve=<?php echo $oEleve->getId(); ?>">Supprimer</a></td>
+                            <td><a href="index.php?page=Eleve&idEleve=<?php echo $oEleve->getId(); ?>"><i class="icon-edit"></i></a>
+                            <a href="index.php?page=deleteOneEleve&idEleve=<?php echo $oEleve->getId(); ?>"><i class="icon-remove-sign"></i></a></td>
                         <?php endif; ?>
                     </tr>
 
                 <?php endforeach; ?>
 
             </tbody>
-
         </table>
     </section>
 </div>

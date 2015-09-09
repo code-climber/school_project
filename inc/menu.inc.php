@@ -3,7 +3,7 @@
     //use ecommerce\model\dao\CategoryManager;
 
 ?>
-<nav class="navbar navbar-default col-md-12" role="navigation">
+<nav class="navbar navbar-inverse col-md-12" role="navigation">
     <ul class="list-inline">
         <li>
             <a href="<?php echo 'index.php?page=home'; ?>" class="navbar-text">Accueil</a>

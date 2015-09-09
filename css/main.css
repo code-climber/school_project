@@ -1,23 +1,5 @@
-.container > footer {
-    margin-top: 50px;
-}
+.top-buffer { margin-top:20px; }
 
-.home .content .product img {
-    margin: 10px;
-}
+.panel{background-color:#222222;}
 
-.home .products .product img {
-    width: 200px;
-}
-
-.product .content > img {
-    max-height: 400px;
-}
-
-.cart .content table img {
-    max-height: 100px;
-}
-
-.account .content table img {
-    max-height: 100px;
-}
+.panel-body{color:#FFF;}
